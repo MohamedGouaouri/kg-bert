@@ -26,6 +26,7 @@ import sys
 
 import numpy as np
 import torch
+from torch import nn
 from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler,
                               TensorDataset)
 from torch.utils.data.distributed import DistributedSampler
@@ -36,15 +37,25 @@ from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics import matthews_corrcoef, f1_score
 from sklearn import metrics
 
-from pytorch_pretrained_bert.file_utils import PYTORCH_PRETRAINED_BERT_CACHE, WEIGHTS_NAME, CONFIG_NAME
-from pytorch_pretrained_bert.modeling import BertForSequenceClassification, BertConfig
+from pytorch_pretrained_bert.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
+from pytorch_pretrained_bert.modeling import BertForSequenceClassification, BertConfig, PreTrainedBertModel, BertModel
 from pytorch_pretrained_bert.tokenization import BertTokenizer
-from pytorch_pretrained_bert.optimization import BertAdam, WarmupLinearSchedule
+from pytorch_pretrained_bert.optimization import BertAdam
+
+WEIGHTS_NAME = "weights"
+CONFIG_NAME = "config.json"
 
 os.environ['CUDA_VISIBLE_DEVICES']= '6'
 #torch.backends.cudnn.deterministic = True
 
 logger = logging.getLogger(__name__)
+
+
+class AttributeDict(dict):
+    __getattr__ = dict.__getitem__
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__
+
 
 
 class InputExample(object):
@@ -640,10 +651,34 @@ def main():
             for step, batch in enumerate(tqdm(train_dataloader, desc="Iteration")):
                 batch = tuple(t.to(device) for t in batch)
                 input_ids, input_mask, segment_ids, label_ids = batch
-
+                print("Input Id shape: ", input_ids.size(1))
                 # define a new function to compute loss values for both output_modes
-                logits = model(input_ids, segment_ids, input_mask, labels=None)
-                #print(logits, logits.shape)
+                logits, pooled_output, encoded_layers = model(input_ids, segment_ids, input_mask, labels=None)
+                # print("Encoded_layers: ", len(encoded_layers), encoded_layers[-1].shape)
+                print("Trying to get the embedding of an entity")
+                example = {
+                    "text_a": "programmer_analyst",
+                    "text_b": None,
+                    "text_c": None,
+                    "label": "1"
+                }
+                example = AttributeDict(example)
+                example_feature = convert_examples_to_features([example], label_list, args.max_seq_length, tokenizer, print_info=False)
+                input_ids = torch.tensor(example_feature[0].input_ids, dtype=torch.long)
+                input_mask = torch.tensor(example_feature[0].input_mask, dtype=torch.long)
+                segment_ids = torch.tensor(example_feature[0].segment_ids, dtype=torch.long)
+
+                # example_data = TensorDataset(torch.tensor([example_feature[0].input_ids]), torch.tensor([example_feature[0].input_mask]), torch.tensor([example_feature[0].segment_ids]), torch.tensor([example_feature[0].label_id]))
+                # example_dataloader = DataLoader(example_data, sampler=train_sampler, batch_size=1)
+                # batch = list(example_dataloader)
+                # print(batch)
+                # input_ids, input_mask, segment_ids, label_ids = example_data
+                # print("After", input_ids[None, :].size(1))
+                input_ids = input_ids[None, :]
+                input_mask = input_mask[None, :]
+                segment_ids = segment_ids[None, :]
+                _, _, encoded_layers = model(input_ids, segment_ids, input_mask, labels=None)
+                print("Embedding from last attention head: ", encoded_layers[-1].shape)
 
                 loss_fct = CrossEntropyLoss()
                 loss = loss_fct(logits.view(-1, num_labels), label_ids.view(-1))
@@ -674,6 +709,9 @@ def main():
                     global_step += 1
             print("Training loss: ", tr_loss, nb_tr_examples)
 
+    # Try to get embedding of a sample token
+    # ex: programmer_analyst
+
     if args.do_train and (args.local_rank == -1 or torch.distributed.get_rank() == 0):
         # Save a trained model, configuration and tokenizer
         model_to_save = model.module if hasattr(model, 'module') else model  # Only save the model it-self
@@ -683,12 +721,13 @@ def main():
         output_config_file = os.path.join(args.output_dir, CONFIG_NAME)
 
         torch.save(model_to_save.state_dict(), output_model_file)
-        model_to_save.config.to_json_file(output_config_file)
+        # model_to_save.config.to_json_file(output_config_file)
         tokenizer.save_vocabulary(args.output_dir)
 
         # Load a trained model and vocabulary that you have fine-tuned
         model = BertForSequenceClassification.from_pretrained(args.output_dir, num_labels=num_labels)
         tokenizer = BertTokenizer.from_pretrained(args.output_dir, do_lower_case=args.do_lower_case)
+    
     else:
         model = BertForSequenceClassification.from_pretrained(args.bert_model, num_labels=num_labels)
     model.to(device)
@@ -729,7 +768,7 @@ def main():
             label_ids = label_ids.to(device)
 
             with torch.no_grad():
-                logits = model(input_ids, segment_ids, input_mask, labels=None)
+                logits, *_ = model(input_ids, segment_ids, input_mask, labels=None)
 
             # create eval loss and other metric required by the task
             loss_fct = CrossEntropyLoss()
@@ -765,9 +804,9 @@ def main():
     if args.do_predict and (args.local_rank == -1 or torch.distributed.get_rank() == 0):
 
         train_triples = processor.get_train_triples(args.data_dir)
-        dev_triples = processor.get_dev_triples(args.data_dir)
+        # dev_triples = processor.get_dev_triples(args.data_dir)
         test_triples = processor.get_test_triples(args.data_dir)
-        all_triples = train_triples + dev_triples + test_triples
+        all_triples = train_triples + test_triples
 
         all_triples_str_set = set()
         for triple in all_triples:
@@ -806,7 +845,7 @@ def main():
             label_ids = label_ids.to(device)
 
             with torch.no_grad():
-                logits = model(input_ids, segment_ids, input_mask, labels=None)
+                logits, *_ = model(input_ids, segment_ids, input_mask, labels=None)
 
             loss_fct = CrossEntropyLoss()
             tmp_eval_loss = loss_fct(logits.view(-1, num_labels), label_ids.view(-1))
