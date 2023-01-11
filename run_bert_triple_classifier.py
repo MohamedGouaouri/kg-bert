@@ -23,6 +23,7 @@ import logging
 import os
 import random
 import sys
+import json
 
 import numpy as np
 import torch
@@ -402,6 +403,27 @@ def compute_metrics(task_name, preds, labels):
         raise KeyError(task_name)
 
 
+def get_embeddings(model, tokenizer, label_list, entity, max_seq_length):
+
+    example = {
+        "text_a": entity,
+        "text_b": None,
+        "text_c": None,
+        "label": "1"
+    }
+    example = AttributeDict(example)
+    example_feature = convert_examples_to_features([example], label_list, max_seq_length, tokenizer, print_info=False)
+    input_ids = torch.tensor(example_feature[0].input_ids, dtype=torch.long)
+    input_mask = torch.tensor(example_feature[0].input_mask, dtype=torch.long)
+    segment_ids = torch.tensor(example_feature[0].segment_ids, dtype=torch.long)
+
+    input_ids = input_ids[None, :]
+    input_mask = input_mask[None, :]
+    segment_ids = segment_ids[None, :]
+    _, _, encoded_layers = model(input_ids, segment_ids, input_mask, labels=None)
+    
+    return encoded_layers[0]
+
 def main():
     parser = argparse.ArgumentParser()
 
@@ -446,6 +468,11 @@ def main():
     parser.add_argument("--do_predict",
                         action='store_true',
                         help="Whether to run eval on the test set.")
+
+    parser.add_argument("--do_embed",
+                        default=False,
+                        help="Calculate and save entity embeddings learnt from the models"
+                        )
     parser.add_argument("--do_lower_case",
                         action='store_true',
                         help="Set this flag if you are using an uncased model.")
@@ -651,22 +678,22 @@ def main():
             for step, batch in enumerate(tqdm(train_dataloader, desc="Iteration")):
                 batch = tuple(t.to(device) for t in batch)
                 input_ids, input_mask, segment_ids, label_ids = batch
-                print("Input Id shape: ", input_ids.size(1))
+                # print("Input Id shape: ", input_ids.size(1))
                 # define a new function to compute loss values for both output_modes
                 logits, pooled_output, encoded_layers = model(input_ids, segment_ids, input_mask, labels=None)
                 # print("Encoded_layers: ", len(encoded_layers), encoded_layers[-1].shape)
-                print("Trying to get the embedding of an entity")
-                example = {
-                    "text_a": "programmer_analyst",
-                    "text_b": None,
-                    "text_c": None,
-                    "label": "1"
-                }
-                example = AttributeDict(example)
-                example_feature = convert_examples_to_features([example], label_list, args.max_seq_length, tokenizer, print_info=False)
-                input_ids = torch.tensor(example_feature[0].input_ids, dtype=torch.long)
-                input_mask = torch.tensor(example_feature[0].input_mask, dtype=torch.long)
-                segment_ids = torch.tensor(example_feature[0].segment_ids, dtype=torch.long)
+                # print("Trying to get the embedding of an entity")
+                # example = {
+                #     "text_a": "programmer_analyst",
+                #     "text_b": None,
+                #     "text_c": None,
+                #     "label": "1"
+                # }
+                # example = AttributeDict(example)
+                # example_feature = convert_examples_to_features([example], label_list, args.max_seq_length, tokenizer, print_info=False)
+                # input_ids = torch.tensor(example_feature[0].input_ids, dtype=torch.long)
+                # input_mask = torch.tensor(example_feature[0].input_mask, dtype=torch.long)
+                # segment_ids = torch.tensor(example_feature[0].segment_ids, dtype=torch.long)
 
                 # example_data = TensorDataset(torch.tensor([example_feature[0].input_ids]), torch.tensor([example_feature[0].input_mask]), torch.tensor([example_feature[0].segment_ids]), torch.tensor([example_feature[0].label_id]))
                 # example_dataloader = DataLoader(example_data, sampler=train_sampler, batch_size=1)
@@ -674,11 +701,11 @@ def main():
                 # print(batch)
                 # input_ids, input_mask, segment_ids, label_ids = example_data
                 # print("After", input_ids[None, :].size(1))
-                input_ids = input_ids[None, :]
-                input_mask = input_mask[None, :]
-                segment_ids = segment_ids[None, :]
-                _, _, encoded_layers = model(input_ids, segment_ids, input_mask, labels=None)
-                print("Embedding from last attention head: ", encoded_layers[-1].shape)
+                # input_ids = input_ids[None, :]
+                # input_mask = input_mask[None, :]
+                # segment_ids = segment_ids[None, :]
+                # _, _, encoded_layers = model(input_ids, segment_ids, input_mask, labels=None)
+                # print("Embedding from last attention head: ", encoded_layers[-1].shape)
 
                 loss_fct = CrossEntropyLoss()
                 loss = loss_fct(logits.view(-1, num_labels), label_ids.view(-1))
@@ -731,6 +758,14 @@ def main():
     else:
         model = BertForSequenceClassification.from_pretrained(args.bert_model, num_labels=num_labels)
     model.to(device)
+
+    if args.do_embed:
+        entities = processor.get_entities(args.data_dir)
+        embeddings = {}
+        for ent in entities:
+            e = get_embeddings(model, tokenizer, label_list, ent, args.max_seq_length)
+            embeddings[ent] = e
+        json.dumps(embeddings, args.output_dir+"/embeddings.json")
 
     if args.do_eval and (args.local_rank == -1 or torch.distributed.get_rank() == 0):
         
