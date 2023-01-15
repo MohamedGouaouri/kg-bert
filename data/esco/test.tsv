@@ -1,0 +1,11 @@
+physiotherapist 	is_similar_to 	primary_school_teaching_assistant 	 	a 	 	 	 	-1
+physiotherapist 	is_similar_to 	osteopath 	1
+food_safety_specialist 	is_similar_to 	food_safety_specialist 	 	 	 	1
+bus_driver 	is_similar_to 	driver 	1
+bus_driver 	is_similar_to 	teacher_in_a_primary_school 	-1
+head_chef 	is_similar_to 	chef_de_cuisine 	1
+biomedical_engineer 	is_similar_to 	insurance_claims_handler 	-1
+tile_fitter 	is_similar_to 	teacher 	-1
+administrative_assistant 	is_similar_to 	office_administrator 	1
+coffee_grinder 	is_similar_to 	metro_train_driver 	-1
+software_analyst 	is_similar_to 	programmer 	1
