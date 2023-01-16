@@ -420,9 +420,9 @@ def get_embeddings(model, tokenizer, label_list, entity, max_seq_length):
     input_ids = input_ids[None, :]
     input_mask = input_mask[None, :]
     segment_ids = segment_ids[None, :]
-    _, _, encoded_layers = model(input_ids, segment_ids, input_mask, labels=None)
+    _, pooled_output = model(input_ids, segment_ids, input_mask, labels=None)
     
-    return encoded_layers[0]
+    return pooled_output
 
 def main():
     parser = argparse.ArgumentParser()
@@ -470,7 +470,7 @@ def main():
                         help="Whether to run eval on the test set.")
 
     parser.add_argument("--do_embed",
-                        default=False,
+                        action='store_true',
                         help="Calculate and save entity embeddings learnt from the models"
                         )
     parser.add_argument("--do_lower_case",
@@ -680,7 +680,7 @@ def main():
                 input_ids, input_mask, segment_ids, label_ids = batch
                 # print("Input Id shape: ", input_ids.size(1))
                 # define a new function to compute loss values for both output_modes
-                logits, pooled_output, encoded_layers = model(input_ids, segment_ids, input_mask, labels=None)
+                logits, pooled_output = model(input_ids, segment_ids, input_mask, labels=None)
                 # print("Encoded_layers: ", len(encoded_layers), encoded_layers[-1].shape)
                 # print("Trying to get the embedding of an entity")
                 # example = {
@@ -736,9 +736,13 @@ def main():
                     global_step += 1
             print("Training loss: ", tr_loss, nb_tr_examples)
 
-    # Try to get embedding of a sample token
-    # ex: programmer_analyst
-
+    embeddings = {}
+    for ent in entity_list:
+        embedding = get_embeddings(model, tokenizer, label_list, ent, args.max_seq_length)
+        embeddings[ent] = embedding.detach().numpy().tolist()
+    with open("embeddings.json", "w") as fp:
+        json.dump(embeddings, fp)
+        
     if args.do_train and (args.local_rank == -1 or torch.distributed.get_rank() == 0):
         # Save a trained model, configuration and tokenizer
         model_to_save = model.module if hasattr(model, 'module') else model  # Only save the model it-self
@@ -747,7 +751,7 @@ def main():
         output_model_file = os.path.join(args.output_dir, WEIGHTS_NAME)
         output_config_file = os.path.join(args.output_dir, CONFIG_NAME)
 
-        torch.save(model_to_save.state_dict(), output_model_file)
+        # torch.save(model_to_save.state_dict(), output_model_file)
         # model_to_save.config.to_json_file(output_config_file)
         tokenizer.save_vocabulary(args.output_dir)
 
