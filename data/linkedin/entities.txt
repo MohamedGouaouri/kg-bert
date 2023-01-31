@@ -1027,3 +1027,4 @@ exploratory_data_analysis
 modelling_insights
 time_series_modelling
 conduct_research
+mysql

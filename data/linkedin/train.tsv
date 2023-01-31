@@ -33,7 +33,6 @@ data_scientist_insights_&_analytics	has_skill	patient_data
 data_scientist_insights_&_analytics	has_skill	customer_reports	
 data_scientist_insights_&_analytics	has_skill	code_reviews	
 data_scientist_insights_&_analytics	has_skill	data_infrastructure	
-	
 data_scientist	has_skill	payment_events	
 data_scientist	has_skill	digital_commerce	
 data_scientist	has_skill	data_scientists	
@@ -70,7 +69,6 @@ data_scientist	has_skill	ecommerce
 data_scientist	has_skill	fraud_risk_management	
 data_scientist	has_skill	add_values_products	
 data_scientist	has_skill	economic_growth	
-	
 data_scientist	has_skill	transaction_data_analysis	
 data_scientist	has_skill	data_science	
 data_scientist	has_skill	fraud_risk_modeling	
@@ -104,7 +102,6 @@ data_scientist	has_skill	machine_learning_software
 data_scientist	has_skill	advanced_statistical_methods	
 data_scientist	has_skill	business_problems	
 data_scientist	has_skill	add_values_products	
-	
 data_scientist	has_skill	data_gathering	
 data_scientist	has_skill	payment_technology	
 data_scientist	has_skill	business_strategies	
@@ -149,7 +146,6 @@ data_scientist	has_skill	complex_analyses
 data_scientist	has_skill	revenue_generation	
 data_scientist	has_skill	data_accuracy	
 data_scientist	has_skill	data_models	
-	
 data_scientist	has_skill	statistics	
 data_scientist	has_skill	natural_language_processing	
 data_scientist	has_skill	algorithms	
@@ -210,7 +206,6 @@ data_scientist	has_skill	data_consultants
 data_scientist	has_skill	data_systems_architecture	
 data_scientist	has_skill	statisticians	
 data_scientist	has_skill	electronic_medical_record	
-	
 data_scientist	has_skill	forecasting	
 data_scientist	has_skill	analytical_role	
 data_scientist	has_skill	statistical	
@@ -223,7 +218,6 @@ data_scientist	has_skill	advocate_technical_solutions
 data_scientist	has_skill	apache_hive_hadoop	
 data_scientist	has_skill	sql_programming_language	
 data_scientist	has_skill	business	
-data_scientist	has_skill	model_parameters	
 data_scientist	has_skill	business	
 data_scientist	has_skill	demand_forecasts	
 data_scientist	has_skill	testing_models	
@@ -257,7 +251,6 @@ data_scientist	has_skill	statistical_analysis
 data_scientist	has_skill	software_engineers	
 data_scientist	has_skill	statistical_machine_learning	
 data_scientist	has_skill	identifying_fixes	
-	
 data_scientist	has_skill	statistical/mathematical_software	
 data_scientist	has_skill	project_scoping_work	
 data_scientist	has_skill	python_programming_language	
@@ -289,7 +282,6 @@ data_scientist	has_skill	proposed_estimator
 data_scientist	has_skill	marketing_science	
 data_scientist	has_skill	biostatistics	
 data_scientist	has_skill	poc_performance_metrics	
-	
 machine_learning_engineer_nlp	has_skill	data_cloud	
 machine_learning_engineer_nlp	has_skill	large_custom_datasets	
 machine_learning_engineer_nlp	has_skill	scientific_analysis	
@@ -316,7 +308,6 @@ machine_learning_engineer_nlp	has_skill	generative_models
 machine_learning_engineer_nlp	has_skill	design	
 machine_learning_engineer_nlp	has_skill	graph_network_analysis	
 machine_learning_engineer_nlp	has_skill	python_programming_language	
-machine_learning_engineer_nlp	has_skill	failure_modes_limitations	
 machine_learning_engineer_nlp	has_skill	computational_linguistics	
 machine_learning_engineer_nlp	has_skill	multilingual	
 machine_learning_engineer_nlp	has_skill	novel_research	
@@ -328,7 +319,6 @@ machine_learning_engineer_nlp	has_skill	operations_research
 machine_learning_engineer_nlp	has_skill	information_extraction	
 machine_learning_engineer_nlp	has_skill	algorithms	
 machine_learning_engineer_nlp	has_skill	opensource_machine_learning	
-	
 developer_iii_data_engineer_core_services	has_skill	supply_chain_management	
 developer_iii_data_engineer_core_services	has_skill	problem_solving	
 developer_iii_data_engineer_core_services	has_skill	information_business	
@@ -399,7 +389,6 @@ developer_iii_data_engineer_core_services	has_skill	complex_event_processing
 developer_iii_data_engineer_core_services	has_skill	scrum	
 developer_iii_data_engineer_core_services	has_skill	communication	
 developer_iii_data_engineer_core_services	has_skill	big_data	
-	
 data_scientist_instagram_stories	has_skill	analysis	
 data_scientist_instagram_stories	has_skill	interact_content	
 data_scientist_instagram_stories	has_skill	present_results_recommendations	
@@ -422,7 +411,6 @@ data_scientist_instagram_stories	has_skill	influence_strategy
 data_scientist_instagram_stories	has_skill	complex_ambiguous_area	
 data_scientist_instagram_stories	has_skill	recruiting_process	
 data_scientist_instagram_stories	has_skill	creating_new_products	
-	
 data_scientist_statistician	has_skill	experiment_results	
 data_scientist_statistician	has_skill	experimentation	
 data_scientist_statistician	has_skill	data_analysis	
@@ -480,7 +468,6 @@ data_scientist_statistician	has_skill	building_data_solutions
 data_scientist_statistician	has_skill	product_technology	
 data_scientist_statistician	has_skill	thompson_sampling	
 data_scientist_statistician	has_skill	programming_software	
-	
 data_scientist	has_skill	engineering	
 data_scientist	has_skill	data_science	
 data_scientist	has_skill	written_communication	
@@ -542,7 +529,6 @@ data_scientist	has_skill	test_deploy
 data_scientist	has_skill	complex_problems	
 data_scientist	has_skill	operations_research	
 data_scientist	has_skill	tableau_software	
-	
 data_sr_data_engineer	has_skill	virtual_team_engineers	
 data_sr_data_engineer	has_skill	data_technologies	
 data_sr_data_engineer	has_skill	python_programming_language	
@@ -562,7 +548,6 @@ data_sr_data_engineer	has_skill	data_engineering
 data_sr_data_engineer	has_skill	design_creation_management	
 data_sr_data_engineer	has_skill	data_engineering	
 data_sr_data_engineer	has_skill	scripting_language	
-	
 data_engineer	has_skill	elt/etl	
 data_engineer	has_skill	healthcare	
 data_engineer	has_skill	database_design	
@@ -608,7 +593,6 @@ data_engineer	has_skill	software_services
 data_engineer	has_skill	apache_airflow	
 data_engineer	has_skill	cloud_technologies	
 data_engineer	has_skill	cloud_computing	
-	
 senior_data_engineer	has_skill	new_product_functionality	
 senior_data_engineer	has_skill	data_technology	
 senior_data_engineer	has_skill	redshift	
@@ -656,7 +640,6 @@ senior_data_engineer	has_skill	custom_reporting
 senior_data_engineer	has_skill	data_warehouse	
 senior_data_engineer	has_skill	python_extract_data	
 senior_data_engineer	has_skill	key_management_services	
-	
 data_analytics_engineer	has_skill	communication	
 data_analytics_engineer	has_skill	data_entry	
 data_analytics_engineer	has_skill	clean_ready_analysis	
@@ -691,7 +674,6 @@ data_analytics_engineer	has_skill	marketing
 data_analytics_engineer	has_skill	code_support	
 data_analytics_engineer	has_skill	propose_solutions	
 data_analytics_engineer	has_skill	complex_systems	
-	
 software_engineer_ii	has_skill	testdriven_development	
 software_engineer_ii	has_skill	objectoriented_design	
 software_engineer_ii	has_skill	software_development	
@@ -733,7 +715,6 @@ software_engineer_ii	has_skill	sql_server
 software_engineer_ii	has_skill	refactor_existing_software	
 software_engineer_ii	has_skill	design	
 software_engineer_ii	has_skill	interfacing_electronics	
-	
 embedded_software_development_engineer	has_skill	programming_software	
 embedded_software_development_engineer	has_skill	software_development_life_cycle	
 embedded_software_development_engineer	has_skill	multi_generational_product_planning	
@@ -759,7 +740,6 @@ embedded_software_development_engineer	has_skill	operating_systems
 embedded_software_development_engineer	has_skill	network_driver	
 embedded_software_development_engineer	has_skill	designing	
 embedded_software_development_engineer	has_skill	embedded_software	
-	
 senior_software_engineer_frontend_platform	has_skill	react_javascript_framework	
 senior_software_engineer_frontend_platform	has_skill	build_engineering	
 senior_software_engineer_frontend_platform	has_skill	modern_testing_frameworks	
@@ -784,7 +764,6 @@ senior_software_engineer_frontend_platform	has_skill	responsive_design
 senior_software_engineer_frontend_platform	has_skill	web_development_website	
 senior_software_engineer_frontend_platform	has_skill	software_engineer	
 senior_software_engineer_frontend_platform	has_skill	microservices_architecture	
-	
 embedded_software_engineer	has_skill	design	
 embedded_software_engineer	has_skill	software	
 embedded_software_engineer	has_skill	ethernet_ip	
@@ -822,7 +801,6 @@ embedded_software_engineer	has_skill	agile_development_processes
 embedded_software_engineer	has_skill	software_design	
 embedded_software_engineer	has_skill	scripting_language	
 embedded_software_engineer	has_skill	unit_testing_software_class	
-	
 senior_data_engineer	has_skill	data_engineer	
 senior_data_engineer	has_skill	data_modeling	
 senior_data_engineer	has_skill	pubsub	
@@ -849,7 +827,6 @@ senior_data_engineer	has_skill	distributed_systems
 senior_data_engineer	has_skill	databases	
 senior_data_engineer	has_skill	datawarehousing	
 senior_data_engineer	has_skill	nosql	
-	
 senior_software_engineer	has_skill	windows	
 senior_software_engineer	has_skill	linux_operating_system	
 senior_software_engineer	has_skill	design	
@@ -888,7 +865,6 @@ senior_software_engineer	has_skill	c++
 senior_software_engineer	has_skill	development_software	
 senior_software_engineer	has_skill	white/gray/black_box_testing	
 senior_software_engineer	has_skill	system_simulation	
-	
 software_engineer	has_skill	design	
 software_engineer	has_skill	build_deployment_support	
 software_engineer	has_skill	coder	
@@ -929,15 +905,12 @@ software_engineer	has_skill	next_big_idea
 software_engineer	has_skill	kafka	
 software_engineer	has_skill	ecmascript6	
 software_engineer	has_skill	java_programming_language	
-software_engineer	has_skill	springboot_web_framework	
-	
 data_scientist	has_skill	information_distribution	
 data_scientist	has_skill	quality_patient_safety_service	
 data_scientist	has_skill	knowledge_management	
 data_scientist	has_skill	analytics	
 data_scientist	has_skill	project_management	
 data_scientist	has_skill	information_data_analysis	
-	
 data_scientist	has_skill	data_analysis	
 data_scientist	has_skill	multivariate_analysis	
 data_scientist	has_skill	github	
@@ -958,7 +931,6 @@ data_scientist	has_skill	written_communication
 data_scientist	has_skill	bioinformatic_tools	
 data_scientist	has_skill	genomic_data	
 data_scientist	has_skill	data_scientist	
-	
 systems_engineer	has_skill	local_network	
 systems_engineer	has_skill	wide_network	
 systems_engineer	has_skill	sql_structured_query_language_databases	
@@ -1023,7 +995,6 @@ systems_engineer	has_skill	troubleshooting_diagnostic
 systems_engineer	has_skill	virtual_server	
 systems_engineer	has_skill	server_desktop	
 systems_engineer	has_skill	network_services	
-	
 senior_network_engineer	has_skill	network_operations_center	
 senior_network_engineer	has_skill	vlan_configuration	
 senior_network_engineer	has_skill	routers_configuration	
@@ -1048,4 +1019,3 @@ senior_network_engineer	has_skill	installing_configuring
 senior_network_engineer	has_skill	troubleshooting	
 senior_network_engineer	has_skill	load_balancing	
 senior_network_engineer	has_skill	comprehensive_technical_support	
-	
