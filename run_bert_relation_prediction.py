@@ -32,14 +32,19 @@ from torch.utils.data.distributed import DistributedSampler
 from tqdm import tqdm, trange
 
 from torch.nn import CrossEntropyLoss, MSELoss
-from scipy.stats import pearsonr, spearmanr
-from sklearn.metrics import matthews_corrcoef, f1_score
-from sklearn import metrics
+# from scipy.stats import pearsonr, spearmanr
+# from sklearn.metrics import matthews_corrcoef, f1_score
+# from sklearn import metrics
 
-from pytorch_pretrained_bert.file_utils import PYTORCH_PRETRAINED_BERT_CACHE, WEIGHTS_NAME, CONFIG_NAME
+from pytorch_pretrained_bert.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 from pytorch_pretrained_bert.modeling import BertForSequenceClassification, BertConfig
 from pytorch_pretrained_bert.tokenization import BertTokenizer
 from pytorch_pretrained_bert.optimization import BertAdam, WarmupLinearSchedule
+
+
+WEIGHTS_NAME = "weights"
+CONFIG_NAME = "config.json"
+
 
 os.environ['CUDA_VISIBLE_DEVICES']= '3'
 #torch.backends.cudnn.deterministic = True
