@@ -34,16 +34,16 @@ from torch.utils.data.distributed import DistributedSampler
 from tqdm import tqdm, trange
 
 from torch.nn import CrossEntropyLoss, MSELoss
-from scipy.stats import pearsonr, spearmanr
-from sklearn.metrics import matthews_corrcoef, f1_score
-from sklearn import metrics
+# from scipy.stats import pearsonr, spearmanr
+# from sklearn.metrics import matthews_corrcoef, f1_score
+# from sklearn import metrics
 
 from pytorch_pretrained_bert.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
-from pytorch_pretrained_bert.modeling import BertForSequenceClassification, BertConfig, PreTrainedBertModel, BertModel
+from pytorch_pretrained_bert.modeling import BertForSequenceClassification, BertConfig, BertModel
 from pytorch_pretrained_bert.tokenization import BertTokenizer
 from pytorch_pretrained_bert.optimization import BertAdam
 
-WEIGHTS_NAME = "weights"
+WEIGHTS_NAME = "pytorch_model.bin"
 CONFIG_NAME = "config.json"
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '6'
@@ -711,7 +711,7 @@ def main():
                 input_ids, input_mask, segment_ids, label_ids = batch
                 # print("Input Id shape: ", input_ids.size(1))
                 # define a new function to compute loss values for both output_modes
-                logits, pooled_output = model(
+                logits, *_ = model(
                     input_ids, segment_ids, input_mask, labels=None)
                 # print("Encoded_layers: ", len(encoded_layers), encoded_layers[-1].shape)
                 # print("Trying to get the embedding of an entity")
@@ -785,9 +785,9 @@ def main():
         output_model_file = os.path.join(args.output_dir, WEIGHTS_NAME)
         output_config_file = os.path.join(args.output_dir, CONFIG_NAME)
 
-        # torch.save(model_to_save.state_dict(), output_model_file)
-        # model_to_save.config.to_json_file(output_config_file)
-        # tokenizer.save_vocabulary(args.output_dir)
+        torch.save(model_to_save.state_dict(), output_model_file)
+        model_to_save.config.to_json_file(output_config_file)
+        tokenizer.save_vocabulary(args.output_dir)
 
         # Load a trained model and vocabulary that you have fine-tuned
         # model = BertForSequenceClassification.from_pretrained(args.output_dir, num_labels=num_labels)
@@ -835,8 +835,8 @@ def main():
         # Load a trained model and vocabulary that you have fine-tuned
 
         # This line raises an error if the model is not saved
-        # model = BertForSequenceClassification.from_pretrained(args.output_dir, num_labels=num_labels)
-        # tokenizer = BertTokenizer.from_pretrained(args.output_dir, do_lower_case=args.do_lower_case)
+        model = BertForSequenceClassification.from_pretrained(args.output_dir, num_labels=num_labels)
+        tokenizer = BertTokenizer.from_pretrained(args.output_dir, do_lower_case=args.do_lower_case)
         model.to(device)
 
         model.eval()
@@ -851,7 +851,7 @@ def main():
             label_ids = label_ids.to(device)
 
             with torch.no_grad():
-                logits, *_ = model(input_ids, segment_ids,
+                logits = model(input_ids, segment_ids,
                                    input_mask, labels=None)
 
             # create eval loss and other metric required by the task

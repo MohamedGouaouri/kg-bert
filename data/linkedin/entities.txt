@@ -206,7 +206,6 @@ polished_reports
 merchants
 data_brought
 leveraging_data_influence
-data_scientist_insights_________&_________analytics
 testing_embedded_software
 advanced_statistical_methods
 etl_pipeline
@@ -425,7 +424,6 @@ website
 analytical_skills
 shopping
 nutritional_biochemistry
-c_________#
 ethernet_ip
 proposed_estimator
 apache_hive_software
@@ -1028,3 +1026,7 @@ modelling_insights
 time_series_modelling
 conduct_research
 mysql
+c#
+apache_avro
+data_scientist_insights_&_analytics
+json_data

@@ -1,1 +1,1 @@
-has skill
+has_skill

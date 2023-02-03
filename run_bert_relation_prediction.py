@@ -42,7 +42,7 @@ from pytorch_pretrained_bert.tokenization import BertTokenizer
 from pytorch_pretrained_bert.optimization import BertAdam, WarmupLinearSchedule
 
 
-WEIGHTS_NAME = "weights"
+WEIGHTS_NAME = "pytorch_model.bin"
 CONFIG_NAME = "config.json"
 
 
@@ -197,7 +197,7 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
     """Loads a data file into a list of `InputBatch`s."""
 
     label_map = {label : i for i, label in enumerate(label_list)}
-
+    print("LABEL MAP", label_map, label_list)
     features = []
     for (ex_index, example) in enumerate(examples):
         if ex_index % 10000 == 0 and print_info:
@@ -603,8 +603,8 @@ def main():
         tokenizer.save_vocabulary(args.output_dir)
 
         # Load a trained model and vocabulary that you have fine-tuned
-        model = BertForSequenceClassification.from_pretrained(args.output_dir, num_labels=num_labels)
-        tokenizer = BertTokenizer.from_pretrained(args.output_dir, do_lower_case=args.do_lower_case)
+        # model = BertForSequenceClassification.from_pretrained(args.output_dir, num_labels=num_labels)
+        # tokenizer = BertTokenizer.from_pretrained(args.output_dir, do_lower_case=args.do_lower_case)
     else:
         model = BertForSequenceClassification.from_pretrained(args.bert_model, num_labels=num_labels)
     model.to(device)

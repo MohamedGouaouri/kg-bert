@@ -30,7 +30,6 @@ data_scientist	has_skill	statistical_testing	1
 data_scientist	has_skill	factor_analysis	1
 data_scientist	has_skill	business_strategies	1
 data_scientist	has_skill	statistical_languages	1
-
 machine_learning_engineer	has_skill	projects_completion	1
 machine_learning_engineer	has_skill	machine_learning	1
 machine_learning_engineer	has_skill	tensorflow_machine_learning_software	1
@@ -61,7 +60,6 @@ machine_learning_engineer	has_skill	modeling	1
 machine_learning_engineer	has_skill	machine_learning	1
 machine_learning_engineer	has_skill	python_programming_language	1
 machine_learning_engineer	has_skill	finetuning	1
-
 software_engineer	has_skill	software_engineer	1
 software_engineer	has_skill	typescript	1
 software_engineer	has_skill	open_polyglot	1
@@ -72,11 +70,10 @@ software_engineer	has_skill	google_cloud_platform	1
 software_engineer	has_skill	apache_hive	-1
 software_engineer	has_skill	amazon_web_services_cloud	1
 software_engineer	has_skill	data_mining	-1
-software_engineer	has_skill	terraform	-1
+software_engineer	has_skill	terraform	1
 software_engineer	has_skill	spark_sql	-1
 software_engineer	has_skill	development_processes	1
 software_engineer	has_skill	data_scientist	-1
-
 data_scientist	has_skill	data_scientists	1
 data_scientist	has_skill	web_apps	-1
 data_scientist	has_skill	communication	1
@@ -93,7 +90,6 @@ data_scientist	has_skill	react_javascript_framework	-1
 data_scientist	has_skill	apache_spark	1
 data_scientist	has_skill	scala_programming_language	1
 data_scientist	has_skill	r_programming_language	1
-
 data_scientist	has_skill	analytics	1
 data_scientist	has_skill	data_mining	1
 data_scientist	has_skill	deep_learning	1
@@ -129,7 +125,6 @@ data_scientist	has_skill	tensorflow	1
 data_scientist	has_skill	web_server_technologies	-1
 data_scientist	has_skill	data_exploration	1
 data_scientist	has_skill	unit/integration_testing	-1
-
 software_engineer	has_skill	building_web_services	1
 software_engineer	has_skill	fast_prototyping_ideas	1
 software_engineer	has_skill	adobe_experience	1
@@ -141,7 +136,6 @@ software_engineer	has_skill	kafka	1
 software_engineer	has_skill	aplication_programming_interface	1
 software_engineer	has_skill	scala_programming_language	1
 software_engineer	has_skill	machine_learning	-1
-
 frontend_software_engineer	has_skill	deploying_aws_lambda	-1
 frontend_software_engineer	has_skill	software_engineering	1
 frontend_software_engineer	has_skill	testing	1
