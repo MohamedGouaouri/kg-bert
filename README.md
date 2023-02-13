@@ -1,141 +1,126 @@
-# KG-BERT: BERT for Knowledge Graph Completion
+---
+pipeline_tag: sentence-similarity
+tags:
+- sentence-transformers
+- feature-extraction
+- sentence-similarity
+- transformers
 
-The repository is modified from [pytorch-pretrained-BERT](https://github.com/huggingface/pytorch-pretrained-BERT) and tested on Python 3.5+.
+---
 
+# {MODEL_NAME}
 
-## Installing requirement packages
+This is a [sentence-transformers](https://www.SBERT.net) model: It maps sentences & paragraphs to a 768 dimensional dense vector space and can be used for tasks like clustering or semantic search.
 
-```bash
-pip install -r requirements.txt
+<!--- Describe your model here -->
+
+## Usage (Sentence-Transformers)
+
+Using this model becomes easy when you have [sentence-transformers](https://www.SBERT.net) installed:
+
+```
+pip install -U sentence-transformers
 ```
 
-## Data
+Then you can use the model like this:
 
-(1) The benchmark knowledge graph datasets are in ./data. 
+```python
+from sentence_transformers import SentenceTransformer
+sentences = ["This is an example sentence", "Each sentence is converted"]
 
-(2) entity2text.txt or entity2textlong.txt in each dataset contains entity textual sequences.
-
-(3) relation2text.txt in each dataset contains relation textual sequences.
-
-## Reproducing results
- 
-### 1. Triple Classification
-
-#### WN11
-
-```shell
-python run_bert_triple_classifier.py 
---task_name kg
---do_train  
---do_eval 
---do_predict 
---data_dir ./data/WN11 
---bert_model bert-base-uncased 
---max_seq_length 20 
---train_batch_size 32 
---learning_rate 5e-5 
---num_train_epochs 3.0 
---output_dir ./output_WN11/  
---gradient_accumulation_steps 1 
---eval_batch_size 512
-```
-
-#### FB13
-
-```shell
-python run_bert_triple_classifier.py 
---task_name kg  
---do_train  
---do_eval 
---do_predict 
---data_dir ./data/FB13 
---bert_model bert-base-cased
---max_seq_length 200
---train_batch_size 32 
---learning_rate 5e-5 
---num_train_epochs 3.0 
---output_dir ./output_FB13/  
---gradient_accumulation_steps 1 
---eval_batch_size 512
+model = SentenceTransformer('{MODEL_NAME}')
+embeddings = model.encode(sentences)
+print(embeddings)
 ```
 
 
-### 2. Relation Prediction
 
-#### FB15K
+## Usage (HuggingFace Transformers)
+Without [sentence-transformers](https://www.SBERT.net), you can use the model like this: First, you pass your input through the transformer model, then you have to apply the right pooling-operation on-top of the contextualized word embeddings.
 
-```shell
-python3 run_bert_relation_prediction.py 
---task_name kg  
---do_train  
---do_eval 
---do_predict 
---data_dir ./data/FB15K 
---bert_model bert-base-cased
---max_seq_length 25
---train_batch_size 32 
---learning_rate 5e-5 
---num_train_epochs 20.0 
---output_dir ./output_FB15K/  
---gradient_accumulation_steps 1 
---eval_batch_size 512
+```python
+from transformers import AutoTokenizer, AutoModel
+import torch
+
+
+#Mean Pooling - Take attention mask into account for correct averaging
+def mean_pooling(model_output, attention_mask):
+    token_embeddings = model_output[0] #First element of model_output contains all token embeddings
+    input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+    return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+
+
+# Sentences we want sentence embeddings for
+sentences = ['This is an example sentence', 'Each sentence is converted']
+
+# Load model from HuggingFace Hub
+tokenizer = AutoTokenizer.from_pretrained('{MODEL_NAME}')
+model = AutoModel.from_pretrained('{MODEL_NAME}')
+
+# Tokenize sentences
+encoded_input = tokenizer(sentences, padding=True, truncation=True, return_tensors='pt')
+
+# Compute token embeddings
+with torch.no_grad():
+    model_output = model(**encoded_input)
+
+# Perform pooling. In this case, mean pooling.
+sentence_embeddings = mean_pooling(model_output, encoded_input['attention_mask'])
+
+print("Sentence embeddings:")
+print(sentence_embeddings)
 ```
 
-### 3. Link Prediction
 
-#### WN18RR
 
-```shell
-python3 run_bert_link_prediction.py
---task_name kg  
---do_train  
---do_eval 
---do_predict 
---data_dir ./data/WN18RR
---bert_model bert-base-cased
---max_seq_length 50
---train_batch_size 32 
---learning_rate 5e-5 
---num_train_epochs 5.0 
---output_dir ./output_WN18RR/  
---gradient_accumulation_steps 1 
---eval_batch_size 5000
+## Evaluation Results
+
+<!--- Describe how your model was evaluated -->
+
+For an automated evaluation of this model, see the *Sentence Embeddings Benchmark*: [https://seb.sbert.net](https://seb.sbert.net?model_name={MODEL_NAME})
+
+
+## Training
+The model was trained with the parameters:
+
+**DataLoader**:
+
+`torch.utils.data.dataloader.DataLoader` of length 652 with parameters:
+```
+{'batch_size': 16, 'sampler': 'torch.utils.data.sampler.RandomSampler', 'batch_sampler': 'torch.utils.data.sampler.BatchSampler'}
 ```
 
-#### UMLS
+**Loss**:
 
-```shell
-python3 run_bert_link_prediction.py
---task_name kg  
---do_train  
---do_eval 
---do_predict 
---data_dir ./data/umls
---bert_model bert-base-uncased
---max_seq_length 15
---train_batch_size 32 
---learning_rate 5e-5 
---num_train_epochs 5.0 
---output_dir ./output_umls/  
---gradient_accumulation_steps 1 
---eval_batch_size 135
+`sentence_transformers.losses.SoftmaxLoss.SoftmaxLoss` 
+
+Parameters of the fit()-Method:
+```
+{
+    "epochs": 2,
+    "evaluation_steps": 0,
+    "evaluator": "NoneType",
+    "max_grad_norm": 1,
+    "optimizer_class": "<class 'torch.optim.adamw.AdamW'>",
+    "optimizer_params": {
+        "lr": 2e-05
+    },
+    "scheduler": "WarmupLinear",
+    "steps_per_epoch": null,
+    "warmup_steps": 130,
+    "weight_decay": 0.01
+}
 ```
 
-#### FB15k-237
 
-```shell
-python3 run_bert_link_prediction.py
---task_name kg  
---do_train  
---do_eval 
---do_predict 
---data_dir ./data/FB15k-237
---bert_model bert-base-cased
---max_seq_length 150
---train_batch_size 32 
---learning_rate 5e-5 
---num_train_epochs 5.0 
---output_dir ./output_FB15k-237/  
---gradient_accumulation_steps 1 
---eval_batch_size 1500
+## Full Model Architecture
 ```
+SentenceTransformer(
+  (0): Transformer({'max_seq_length': 512, 'do_lower_case': False}) with Transformer model: BertModel 
+  (1): Pooling({'word_embedding_dimension': 768, 'pooling_mode_cls_token': False, 'pooling_mode_mean_tokens': True, 'pooling_mode_max_tokens': False, 'pooling_mode_mean_sqrt_len_tokens': False})
+)
+```
+
+## Citing & Authors
+
+<!--- Describe where people can find more information -->

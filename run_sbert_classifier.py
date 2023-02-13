@@ -1,3 +1,5 @@
+#!/home/pfe-1301/anaconda3/bin/python
+
 from __future__ import absolute_import, division, print_function
 
 
@@ -18,7 +20,7 @@ from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 
-MODEL_TO_SAVE = "skgbert-cls"
+MODEL_TO_SAVE = "./skgbert.out"
 
 
 class KGInputExample(object):
@@ -218,7 +220,7 @@ class KGProcessor(DataProcessor):
 
 logger = logging.getLogger(__name__)
 
-data_dir="./data/umls"
+data_dir="./data/linkedin"
 batch_size = 16
 
 processor = KGProcessor()
@@ -235,7 +237,7 @@ skgbert_train_examples = []
 for example in tqdm(train_examples):
     skgbert_train_examples.append(
         InputExample(
-            texts=[ example.text_a, example.text_b ,example.text_c ],
+            texts=[ example.text_a, example.text_c ],
             label=int(example.label)
         )
     )
@@ -243,26 +245,30 @@ for example in tqdm(train_examples):
 loader = DataLoader(
     skgbert_train_examples, 
     shuffle=True, 
-    batch_size=batch_size
+    batch_size=batch_size,
 )
 
 
-print("********** Training The model *************")
-bert = models.Transformer('bert-base-uncased')
+print("********** Loading The model *************")
+bert = models.Transformer("bert-base-uncased")
+print("********* Model loadded *************")
+
 pooler = models.Pooling(
     bert.get_word_embedding_dimension(),
     pooling_mode_mean_tokens=True
 )
 model = SentenceTransformer(modules=[bert, pooler])
 
-
 loss = losses.SoftmaxLoss(
     model=model,
     sentence_embedding_dimension=model.get_sentence_embedding_dimension(),
     num_labels=2)
 
-epochs = 5
+epochs = 2
 warmup_steps = int(len(loader) * epochs * 0.1)
+
+print("********** Training The model *************")
+
 model.fit(
     train_objectives=[(loader, loss)],
     epochs=epochs,
